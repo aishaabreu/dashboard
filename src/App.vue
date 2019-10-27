@@ -2,7 +2,11 @@
   <div id="app">
     <div id="bar">
       <span id="clock">{{ clock }}</span>
-      <a id="settings">
+      <a id="menu" @click="oompa_loompas">
+        <span>MINHA CONTA</span>
+        <arrow-down-icon></arrow-down-icon>
+      </a>
+      <a id="settings" @click="oompa_loompas">
         <settings-icon></settings-icon>
       </a>
     </div>
@@ -17,9 +21,12 @@
 <script>
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueMessages from 'vue-messages'
 import SettingsIcon from 'mdi-vue/Settings'
+import ArrowDownIcon from '@/components/icon/ArrowDown'
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
+Vue.use(VueMessages, { themes: 'blackGold' });
 
 const now = () => {
   let datetime = new Date();
@@ -28,7 +35,8 @@ const now = () => {
 
 export default {
   components:{
-    SettingsIcon
+    SettingsIcon,
+    ArrowDownIcon
   },
   data() {
     return {
@@ -39,6 +47,11 @@ export default {
     setInterval(() => {
       this.clock = now();
     }, 1000);
+  },
+  methods: {
+    oompa_loompas(){
+      this.$Message.error('Oompa-Loompas não implementaram essa funcionalidade.');
+    }
   }
 }
 </script>
@@ -58,9 +71,6 @@ export default {
   left: 0;
   width: 100%;
 }
-#bar span{
-  color: #b1b2b3;
-}
 #bar{
   background: #3a3a3a;
   height: 2rem;
@@ -68,21 +78,34 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
+  padding-top: 0.5rem;
+}
+#bar a{
+  cursor: pointer;
+}
+#bar span{
+  color: #b1b2b3;
+  font-size: small;
+}
+#bar span svg{
+  position: absolute;
+  top: 0.25rem;
 }
 #clock{
   left: 5rem;
   position: absolute;
   top: 0.6rem;
-  font-size: small;
 }
 #settings{
-  right: 5rem;
   position: absolute;
-  top: 0.2rem;
-  font-size: small;
+  right: 0;
+  top: 0;
 }
 #settings span{
   color: #7c7e80
+}
+#settings span svg{
+  right: 5rem;
 }
 #nav{
   background: white;
@@ -102,10 +125,18 @@ export default {
 }
 @media (max-width: 600px) {
   #clock{
-    left: 2rem;
+    left: 1.5rem;
   }
-  #settings{
-    right: 2rem;
+  #settings span svg{
+    right: 1.5rem;
+  }
+}
+@media (max-width: 400px) {
+  #clock{
+    display: none;
+  }
+  #settings span svg{
+    right: 0.5rem;
   }
 }
 </style>
