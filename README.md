@@ -6,6 +6,5 @@ Este exemplo segue de acordo com as especificações do (teste de frontend) [htt
 
 - (VueJS) [https://vuejs.org/]
 - (NodeJS) [https://nodejs.org/en/]
-- (Vuetify) [https://vuetifyjs.com/pt-BR/]
 - (WebPack) [https://webpack.js.org/]
 - (Jest) [https://jestjs.io/]
