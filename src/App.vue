@@ -11,8 +11,16 @@
       </a>
     </div>
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <!-- <div class="logo">
+        <img src="" alt="">
+      </div> -->
+      <router-link :to="item.path" :key="item.label" v-for="item in navi">
+        <div class="nav-item">
+          <div class="tag" v-if="item.tag">{{ item.tag }}</div>
+          <component :is="item.icon" :width="36" :height="36"></component><br/>
+          <span>{{ item.label }}</span>
+        </div>
+      </router-link>
     </div>
     <router-view/>
   </div>
@@ -22,8 +30,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueMessages from 'vue-messages'
-import SettingsIcon from 'mdi-vue/Settings'
 import ArrowDownIcon from '@/components/icon/ArrowDown'
+import SettingsIcon from 'mdi-vue/Settings'
+import AlbumIcon from 'mdi-vue/Album'
+import DashboardIcon from 'mdi-vue/SpeedometerMedium'
+import AgendarIcon from 'mdi-vue/Calendar'
+import CalendarioIcon from 'mdi-vue/CalendarMonth'
+import InboxIcon from 'mdi-vue/Inbox'
+import FeedIcon from 'mdi-vue/Newspaper'
+import WorkflowIcon from 'mdi-vue/FolderEdit'
+import AcompanhamentoIcon from 'mdi-vue/MonitorDashboard'
+import RelatoriosIcon from 'mdi-vue/Pizza'
 
 Vue.use(VueRouter);
 Vue.use(VueMessages, { themes: 'blackGold' });
@@ -36,11 +53,63 @@ const now = () => {
 export default {
   components:{
     SettingsIcon,
-    ArrowDownIcon
+    ArrowDownIcon,
+    AlbumIcon,
+    DashboardIcon,
+    AgendarIcon,
+    CalendarioIcon,
+    InboxIcon,
+    FeedIcon,
+    WorkflowIcon,
+    AcompanhamentoIcon,
+    RelatoriosIcon
   },
   data() {
     return {
-      clock: now()
+      clock: now(),
+      navi: [
+        {
+          label: 'DASHBOARD',
+          path: '/',
+          icon: 'dashboard-icon'
+        },
+        {
+          label: 'AGENDAR POST',
+          path: '/agendar_post',
+          icon: 'agendar-icon',
+          tag: 'NOVO'
+        },
+        {
+          label: 'CALENDÁRIO',
+          path: '/calendario',
+          icon: 'calendario-icon'
+        },
+        {
+          label: 'INBOX',
+          path: '/inbox',
+          icon: 'inbox-icon'
+        },
+        {
+          label: 'FEED',
+          path: '/feed',
+          icon: 'feed-icon'
+        },
+        {
+          label: 'WORKFLOW',
+          path: '/workflow',
+          icon: 'workflow-icon'
+        },
+        {
+          label: 'ACOMPANHAMENTO',
+          path: '/acompanhamento',
+          icon: 'acompanhamento-icon'
+        },
+        {
+          label: 'RELATÓRIOS',
+          path: '/relatorios',
+          icon: 'relatorios-icon'
+        },
+      ]
     }
   },
   mounted(){
@@ -116,12 +185,31 @@ export default {
   top: 2rem;
   left: 0;
 }
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+#nav a .nav-item{
+  color: #606060;
+  padding: 0.8rem;
+  float: left;
+  font-size: small;
 }
-#nav a.router-link-exact-active {
-  color: #42b983;
+#nav a .nav-item .tag{
+  background: #ffb300;
+  border-radius: 1rem;
+  position: absolute;
+  margin-left: 4rem;
+  color: white;
+  font-weight: bold;
+  padding: 0.25rem 0.3rem 0;
+  font-size: xx-small;
+}
+#nav a .nav-item .mdi{
+  color: #adadad;
+}
+#nav a.router-link-exact-active .nav-item .mdi{
+  color: #777777;
+}
+#nav a.router-link-exact-active .nav-item{
+  background: #eff0f0;
+  color: #e12b4a;
 }
 @media (max-width: 600px) {
   #clock{
