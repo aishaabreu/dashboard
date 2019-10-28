@@ -11,16 +11,18 @@
       </a>
     </div>
     <div id="nav">
-      <!-- <div class="logo">
-        <img src="" alt="">
-      </div> -->
-      <router-link :to="item.path" :key="item.label" v-for="item in navi">
-        <div class="nav-item">
-          <div class="tag" v-if="item.tag">{{ item.tag }}</div>
-          <component :is="item.icon" :width="36" :height="36"></component><br/>
-          <span>{{ item.label }}</span>
-        </div>
-      </router-link>
+      <div class="logo">
+        <img src="@/assets/lorem-logo.png"/>
+      </div>
+      <div class="nav-items">
+        <router-link :to="item.path" :key="item.label" v-for="item in navi">
+          <div class="nav-item">
+            <div class="tag" v-if="item.tag">{{ item.tag }}</div>
+            <component :is="item.icon" :width="36" :height="36"></component><br/>
+            <span>{{ item.label }}</span>
+          </div>
+        </router-link>
+      </div>
     </div>
     <router-view/>
   </div>
@@ -30,7 +32,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueMessages from 'vue-messages'
-import ArrowDownIcon from '@/components/icon/ArrowDown'
+import ArrowDownIcon from '@/components/icon/ArrowDown.vue'
 import SettingsIcon from 'mdi-vue/Settings'
 import AlbumIcon from 'mdi-vue/Album'
 import DashboardIcon from 'mdi-vue/SpeedometerMedium'
@@ -41,6 +43,7 @@ import FeedIcon from 'mdi-vue/Newspaper'
 import WorkflowIcon from 'mdi-vue/FolderEdit'
 import AcompanhamentoIcon from 'mdi-vue/MonitorDashboard'
 import RelatoriosIcon from 'mdi-vue/Pizza'
+import BeakerIcon from 'mdi-vue/BeakerOutline'
 
 Vue.use(VueRouter);
 Vue.use(VueMessages, { themes: 'blackGold' });
@@ -62,7 +65,8 @@ export default {
     FeedIcon,
     WorkflowIcon,
     AcompanhamentoIcon,
-    RelatoriosIcon
+    RelatoriosIcon,
+    BeakerIcon
   },
   data() {
     return {
@@ -179,11 +183,21 @@ export default {
 #nav{
   background: white;
   border-bottom: 0.1rem solid #dddede;
-  height: 5.2rem;
   width: 100%;
   position: fixed;
   top: 2rem;
   left: 0;
+}
+#nav .logo{
+  float: left;
+  width: 9rem;
+  padding-top: 0.3rem;
+}
+#nav .logo img{
+  width: 100%;
+}
+#nav .nav-items{
+  min-width: 20rem;
 }
 #nav a .nav-item{
   color: #606060;
