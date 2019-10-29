@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <adicao-modal :modal="modal" v-if="modal.active"></adicao-modal>
-    <div class="social-card" :key="social.name" v-for="social in redes">
+    <adicao-modal :modal="modal" :callback="add_page" v-if="modal.active"></adicao-modal>
+    <div class="social-card" :key="social.name" v-for="social in social_list">
       <div class="help" @click="help">?</div>
       <img :src="social.image"/>
       <span>{{ social.name }}</span>
@@ -12,10 +12,13 @@
 
 <script>
 import Vue from 'vue'
+import axios from 'axios';
 import VueMessages from 'vue-messages'
 import AdicaoModal from '@/components/AdicaoRedeSocial.vue'
 
 Vue.use(VueMessages, { themes: 'blackGold' });
+
+const PAGES_URL = 'https://demo2697181.mockable.io/pages';
 
 export default {
   components: {
@@ -26,60 +29,79 @@ export default {
       modal: {
         social: null,
         active: false,
+        pages: []
       },
-      redes: [
+      social_list: [
         {
           image: require('@/assets/facebook.png'),
           name: 'Facebook',
-          channel: 'facebook'
+          channel: 'facebook',
+          help: 'https://pt-br.facebook.com/help/262314300536014/'
         },
         {
           image: require('@/assets/twitter.png'),
           name: 'Twitter',
-          channel: 'twitter'
+          channel: 'twitter',
+          help: 'https://help.twitter.com/pt/managing-your-account/connect-or-revoke-access-to-third-party-apps'
         },
         {
           image: require('@/assets/instagram.png'),
           name: 'Instagram',
-          channel: 'instagram'
+          channel: 'instagram',
+          help: 'https://pt-br.facebook.com/help/instagram/186452768798716'
         },
         {
           image: require('@/assets/google-my-business.png'),
           name: 'Google Meu Negócio',
-          channel: 'google_my_business'
+          channel: 'google_my_business',
+          help: 'https://support.google.com/googleplay/work/answer/6137917'
         },
         {
           image: require('@/assets/pinterest.png'),
           name: 'Pinterest',
-          channel: 'pinterest'
+          channel: 'pinterest',
+          help: 'https://help.pinterest.com/pt-br/article/edit-account-privacy'
         },
         {
           image: require('@/assets/linkedin.png'),
           name: 'LinkedIn',
-          channel: 'linkedin'
+          channel: 'linkedin',
+          help: 'https://www.linkedin.com/help/learning/suggested/95455/como-gerenciar-permissoes-de-administrador-no-linkedin-learning'
         },
         {
           image: require('@/assets/youtube.png'),
           name: 'Youtube',
-          channel: 'youtube'
+          channel: 'youtube',
+          help: 'https://support.google.com/youtube/answer/2453875'
         },
         {
           image: require('@/assets/whatsapp.png'),
           name: 'Whatsapp',
-          channel: 'whatsapp'
+          channel: 'whatsapp',
+          help: 'https://faq.whatsapp.com/pt_pt/iphone/22077198/?category=5245250'
         },
         {
           image: require('@/assets/google-analytics.png'),
           name: 'Google Analytics',
-          channel: 'google_analytics'
+          channel: 'google_analytics',
+          help: 'https://support.google.com/analytics/answer/2884495'
         }
       ]
     }
   },
   methods: {
-    add(social){
+    async add(social){
+      let response = await axios.get(PAGES_URL);
+      let pages = response.data.data;
+
+      this.modal.pages = pages.filter((page) => {
+        return page.channel_key == social.channel;
+      })
       this.modal.social = social;
       this.modal.active = true;
+    },
+    add_page(page){
+      console.log(page);
     },
     help(){
       this.$Message.error('Oompa-Loompas não implementaram essa funcionalidade.');

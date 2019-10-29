@@ -25,11 +25,25 @@
             <span :class="[current > 2 ? 'active' : '']">Concorrentes</span>
           </div>
         </div>
+        <div class="pages" v-if="steps[current].pages">
+          <div class="page" :key="page.id" v-for="page in modal.pages">
+            <div class="image" v-bind:style="{ backgroundImage: 'url(' + page.picture + ')' }"></div>
+            <div class="text">
+              <span>{{ page.name }}</span>
+              <a :href="page.url">{{ page.url }}</a>
+            </div>
+            <input type="radio" name="page" @change="selected = page">
+          </div>
+        </div>
         <span class="info">{{ steps[current].text }}</span>
+        <a :href="modal.social.help" v-if="steps[current].help">
+          Clique aqui para atualizar suas permissões do {{modal.social.name}}
+        </a>
       </div>
       <div class="modal-footer">
-        <button :class="[current? '' : 'disabled']" @click="previous">Voltar</button>
-        <button @click="next">{{ steps[current + 1]? 'Próximo' : 'Concluir' }}</button>
+        <button :class="[!current? 'disabled' : '']" @click="previous">Voltar</button>
+        <button :class="[steps[current].pages && !selected? 'disabled' : '']" @click="next" v-if="steps[current + 1]">Próximo</button>
+        <button @click="callback(selected); close()" v-if="!steps[current + 1]">Concluir</button>
       </div>
     </div>
   </div>
@@ -44,25 +58,35 @@ export default {
   },
   data(){
     return {
+      selected: null,
       current: 0,
       steps: [
         {
-          text: 'Pressione próximo para continuar'
+          text: 'Pressione próximo para continuar',
+          pages: false,
+          help: false
         },
         {
-          text: 'Pressione próximo para continuar'
+          text: 'Não encontrou sua página?',
+          pages: true,
+          help: true
         },
         {
-          text: 'Pressione próximo para continuar'
+          text: 'Pressione próximo para continuar',
+          pages: false,
+          help: false
         },
         {
-          text: 'Pressione concluir para finalizar'
+          text: 'Pressione concluir para finalizar',
+          pages: false,
+          help: false
         }
       ]
     }
   },
   props: {
-    modal: Object
+    modal: Object,
+    callback: Function
   },
   methods: {
     close(){
@@ -72,11 +96,12 @@ export default {
       let previous = this.current - 1;
       if(previous > -1){
         this.current = previous;
+        this.selected = null;
       }
     },
     next(){
       let next = this.current + 1;
-      if(this.steps[next]){
+      if(this.steps[next] && !(this.steps[this.current].pages && !this.selected)){
         this.current = next;
       }
     },
@@ -118,14 +143,14 @@ export default {
   align-items: center;
   padding: 1.4rem;
 }
-.modal a{
+.modal .modal-header a{
   position: absolute;
   right: 0.8rem;
   top: 0.8rem;
   color: gray;
   cursor: pointer;
 }
-.modal span{
+.modal .modal-header span{
   margin-left: 1rem;
 }
 .modal .modal-header img{
@@ -140,9 +165,45 @@ export default {
   text-align: center;
   justify-content: space-between;
 }
+.modal .modal-body .pages{
+  height: 13rem;
+  overflow: auto;
+  width: 100%;
+}
+.modal .modal-body .pages .page{
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  margin: 0.1rem;
+  padding: 0.5rem;
+  background: #efefef;
+}
+.modal .modal-body .pages .page .image{
+  height: 2rem;
+  width: 2rem;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.modal .modal-body .pages .page .text{
+  display: flex;
+  align-items: left;
+  text-align: left;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 16rem;
+}
+.modal .modal-body .pages .page .text a{
+  color: gray;
+  text-decoration: none;
+}
 .modal .modal-body .info{
   font-size: small;
   color: #808284;
+}
+.modal .modal-body a{
+  font-size: x-small;
 }
 .modal .modal-footer{
   display: flex;
