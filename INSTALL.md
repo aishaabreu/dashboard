@@ -23,3 +23,4 @@ npm run test:unit
 ```
 npm run build
 ```
+Após o comando será gerado uma pasta disto com os arquivos státicos do frontend

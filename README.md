@@ -8,3 +8,7 @@ Este exemplo segue de acordo com as especificações do (teste de frontend) [htt
 - (NodeJS) [https://nodejs.org/en/]
 - (WebPack) [https://webpack.js.org/]
 - (Jest) [https://jestjs.io/]
+
+## Porquê VueJS?
+
+Escolhi esse framework por causa da facilidade de gerenciamento no build e pela minha afinidade com ele.
