@@ -180,6 +180,7 @@ export default {
   background: #efefef;
 }
 .modal .modal-body .pages .page .image{
+  border: 0.1rem solid #979797;
   height: 2rem;
   width: 2rem;
   background-size: cover;

@@ -1,11 +1,20 @@
 <template>
   <div class="container">
     <adicao-modal :modal="modal" :callback="add_page" v-if="modal.active"></adicao-modal>
-    <div class="social-card" :key="social.name" v-for="social in social_list">
-      <div class="help" @click="help">?</div>
-      <img :src="social.image"/>
-      <span>{{ social.name }}</span>
-      <button @click="add(social)">Adicionar</button>
+    <div class="social-card" :key="social.name" v-for="social in social_list" v-bind:style="{ background: social.active && social.color }">
+      <div class="select" v-if="!social.active">
+        <div class="help" @click="help">?</div>
+        <img :src="social.image"/>
+        <span>{{ social.name }}</span>
+        <button @click="add(social)">Adicionar</button>
+      </div>
+      <div class="active" v-if="social.active">
+        <div class="active-header">
+          <div class="image" v-bind:style="{ backgroundImage: 'url(' + social.active.picture + ')' }"></div>
+          <span>{{ social.active.name }}</span>
+        </div>
+        <img :src="social.image"/>
+      </div>
     </div>
   </div>
 </template>
@@ -36,55 +45,73 @@ export default {
           image: require('@/assets/facebook.png'),
           name: 'Facebook',
           channel: 'facebook',
-          help: 'https://pt-br.facebook.com/help/262314300536014/'
+          help: 'https://pt-br.facebook.com/help/262314300536014/',
+          color: '#6081c4',
+          active: null
         },
         {
           image: require('@/assets/twitter.png'),
           name: 'Twitter',
           channel: 'twitter',
-          help: 'https://help.twitter.com/pt/managing-your-account/connect-or-revoke-access-to-third-party-apps'
+          help: 'https://help.twitter.com/pt/managing-your-account/connect-or-revoke-access-to-third-party-apps',
+          color: '#00aeef',
+          active: null
         },
         {
           image: require('@/assets/instagram.png'),
           name: 'Instagram',
           channel: 'instagram',
-          help: 'https://pt-br.facebook.com/help/instagram/186452768798716'
+          help: 'https://pt-br.facebook.com/help/instagram/186452768798716',
+          color: '#f49a4e',
+          active: null
         },
         {
           image: require('@/assets/google-my-business.png'),
           name: 'Google Meu Negócio',
           channel: 'google_my_business',
-          help: 'https://support.google.com/googleplay/work/answer/6137917'
+          help: 'https://support.google.com/googleplay/work/answer/6137917',
+          color: '#67a1f9',
+          active: null
         },
         {
           image: require('@/assets/pinterest.png'),
           name: 'Pinterest',
           channel: 'pinterest',
-          help: 'https://help.pinterest.com/pt-br/article/edit-account-privacy'
+          help: 'https://help.pinterest.com/pt-br/article/edit-account-privacy',
+          color: '#ee1b22',
+          active: null
         },
         {
           image: require('@/assets/linkedin.png'),
           name: 'LinkedIn',
           channel: 'linkedin',
-          help: 'https://www.linkedin.com/help/learning/suggested/95455/como-gerenciar-permissoes-de-administrador-no-linkedin-learning'
+          help: 'https://www.linkedin.com/help/learning/suggested/95455/como-gerenciar-permissoes-de-administrador-no-linkedin-learning',
+          color: '#1584af',
+          active: null
         },
         {
           image: require('@/assets/youtube.png'),
           name: 'Youtube',
           channel: 'youtube',
-          help: 'https://support.google.com/youtube/answer/2453875'
+          help: 'https://support.google.com/youtube/answer/2453875',
+          color: '#cc181e',
+          active: null
         },
         {
           image: require('@/assets/whatsapp.png'),
           name: 'Whatsapp',
           channel: 'whatsapp',
-          help: 'https://faq.whatsapp.com/pt_pt/iphone/22077198/?category=5245250'
+          help: 'https://faq.whatsapp.com/pt_pt/iphone/22077198/?category=5245250',
+          color: '#40e35d',
+          active: null
         },
         {
           image: require('@/assets/google-analytics.png'),
           name: 'Google Analytics',
           channel: 'google_analytics',
-          help: 'https://support.google.com/analytics/answer/2884495'
+          help: 'https://support.google.com/analytics/answer/2884495',
+          color: '#f27902',
+          active: null
         }
       ]
     }
@@ -101,7 +128,11 @@ export default {
       this.modal.active = true;
     },
     add_page(page){
-      console.log(page);
+      this.social_list.map((social) =>{
+        if(social.channel == page.channel_key){
+          social.active = page;
+        }
+      })
     },
     help(){
       this.$Message.error('Oompa-Loompas não implementaram essa funcionalidade.');
@@ -116,9 +147,13 @@ export default {
   box-sizing: border-box;
 }
 .social-card{
-  border: 2px dotted #cbcccd;
-  background: #f0f0f0;
   float: left;
+  width: 12.65rem;
+  height: 12.65rem;
+}
+.social-card .select{
+  border: 0.15rem dotted #cbcccd;
+  background: #f0f0f0;
   width: 12.5rem;
   height: 12.5rem;
   display: flex;
@@ -127,11 +162,11 @@ export default {
   text-align: center;
   justify-content: center;
 }
-.social-card span{
+.social-card .select span{
   text-transform: uppercase;
 }
-.social-card .help{
-  border: 2px solid #a2a4a5;
+.social-card .select .help{
+  border: 0.15rem solid #a2a4a5;
   color: #a2a4a5;
   border-radius: 100%;
   width: 1.2rem;
@@ -141,11 +176,12 @@ export default {
   cursor: pointer;
   margin-left: 8rem;
 }
-.social-card img{
+.social-card .select img{
   width: 3.5rem;
+  height: 3.5rem;
   margin-bottom: 0.7rem;
 }
-.social-card button{
+.social-card .select button{
   background: #e12b4a;
   color: white;
   border: 0;
@@ -154,5 +190,21 @@ export default {
   font-weight: bold;
   margin: 0.7rem 0;
   cursor: pointer;
+}
+.social-card .active{
+  width: 12.65rem;
+  height: 12.65rem;
+}
+.social-card .active-header{
+  text-align: center;
+  color: white;
+  background: rgba(0,0,0,0.4);
+  padding: 0.8rem;
+}
+.social-card .active img{
+  width: 3.5rem;
+  height: 3.5rem;
+  float: left;
+  margin: 0.5rem;
 }
 </style>
